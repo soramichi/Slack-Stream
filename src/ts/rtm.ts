@@ -36,6 +36,27 @@ let show_one_channel = false;
 let post_message;
 let posting = false;
 
+// for tests
+class DummyRtmClient {
+    private token: string;
+    private args: {};
+    private message_callback;
+
+    constructor(token: string, args: {}){
+	this.token = token;
+	this.args = args;
+    }
+
+    public on(event, callback): void {
+	this.message_callback = callback;
+    }
+
+    public send_message(message){
+	this.message_callback(message);
+    }
+}
+
+
 for(var i in tokens){
   rtms[i] = new RtmClient(tokens[i], {logLevel: 'debug'});
   rtms[i].start();

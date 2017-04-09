@@ -344,7 +344,7 @@ function extract_text(message: any, user_list: {}, emoji_list: {}, user_id: stri
 }
 
 for(var i in rtms){
-  let user_list:{} = user_lists[i];
+  let rtm_id = i;
   let channel_list:{} = channel_lists[i];
   let bot_list:{} = bot_lists[i];
   let emoji_list:{} = emoji_lists[i];
@@ -378,7 +378,7 @@ for(var i in rtms){
     } else if(message["subtype"] == "message_changed") {
       let pre_id_base = message["previous_message"]["ts"].replace(".", "") + "_" + team_name.replace(/ /g, "") + "_" + channel_name.replace(/ /g, "");
       let pre_text_id = "text_" + pre_id_base;
-      return update_message(pre_text_id, message, user_list, emoji_list, user_id, token);
+      return update_message(pre_text_id, message, user_lists[rtm_id], emoji_list, user_id, token);
     } else if(message["subtype"] == "bot_message") {
       if(!message["bot_id"]) { // "Only visible to you" bot has no bot_id or user info
         image = ""
@@ -391,11 +391,11 @@ for(var i in rtms){
         nick = message["username"] || bot_list[message['bot_id']]['name']
       }
     } else {
-      user = user_list[message["user"]];
+      user = user_lists[rtm_id][message["user"]];
       image = user["profile"]["image_32"];
       nick = user["name"];
     }
-    let text: string = extract_text(message, user_list, emoji_list, user_id);
+    let text: string = extract_text(message, user_lists[rtm_id], emoji_list, user_id);
     let table = $("#main_table");
 
     let shared_file_image_id;

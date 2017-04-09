@@ -38,8 +38,18 @@ describe('integration test', function () {
 	})
 
 	return this.app.client.getHTML("#id_tr_1491025427019113_kongaribug_DM").then(function(tr){
-	    var answer = '<tr id="id_tr_1491025427019113_kongaribug_DM" style=""><td><img src="https://secure.gravatar.com/avatar/540516246cc8ec8853f2fef630db6e62.jpg?s=32&amp;d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0007-32.png"></td><td><b>soramichi <a class="slack-link" href="slack://user?team=T2T2ETX4H&amp;id=U3SCCNG2C"><span style="color: #999d60">#DM</span></a></b> <span style="color: #aaaaaa; font-size: small;">14:43</span> <span id="button_1491025427019113_kongaribug_DM" class="glyphicon glyphicon-pencil message-button inactive_pencil"></span> <span style="float: right" id="del_1491025427019113_kongaribug_DM" class="glyphicon glyphicon-remove"></span><br><span id="text_1491025427019113_kongaribug_DM" class="message"> <p>Message from dummy RtmClient</p></span></td></tr>'
-	    assert.equal(tr, answer)
+	    // expected output:
+	    // '<tr id="id_tr_1491025427019113_kongaribug_DM" style=""><td><img src="https://secure.gravatar.com/avatar/540516246cc8ec8853f2fef630db6e62.jpg?s=32&amp;d=https%3A%2F%2Fa.slack-edge.com%2F66f9%2Fimg%2Favatars%2Fava_0007-32.png"></td><td><b>soramichi <a class="slack-link" href="slack://user?team=T2T2ETX4H&amp;id=U3SCCNG2C"><span style="color: #999d60">#DM</span></a></b> <span style="color: #aaaaaa; font-size: small;">14:43</span> <span id="button_1491025427019113_kongaribug_DM" class="glyphicon glyphicon-pencil message-button inactive_pencil"></span> <span style="float: right" id="del_1491025427019113_kongaribug_DM" class="glyphicon glyphicon-remove"></span><br><span id="text_1491025427019113_kongaribug_DM" class="message"> <p>Message from dummy RtmClient</p></span></td></tr>'
+	    var place_pencil_id = tr.indexOf("button_1491025427019113_kongaribug_DM")
+	    var place_del_id = tr.indexOf("del_1491025427019113_kongaribug_DM")
+	    var place_text_id = tr.indexOf("text_1491025427019113_kongaribug_DM")
+
+	    assert(tr.indexOf("soramichi") != -1, "Username does not exist")
+	    assert(place_pencil_id = -1, "Pencil does not exist")
+	    assert(place_del_id != -1, "Delete button does not exit")
+	    assert(place_text_id != -1, "Message text does not exist")
+	    assert(place_pencil_id < place_del_id, "Delete button should be behind pencil")
+	    assert(place_del_id < place_text_id, "Message text should be behind delete button")
 	})
     })
 })

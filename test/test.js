@@ -13,18 +13,20 @@ describe('integration test', function () {
 	    args: [path_slack_stream]
 	})
 
-	return this.app.start();
+	return this.app.start().then(function (app){
+	    app.client.execute(function (){
+		// create a dummy client
+		_rtm = new DummyRtmClient("", {});
+
+		// copy the event listener for RTM_EVENTS.MESSAGE
+		// Note: we assume rtms[0] is connected to the kongaribug channel
+		_rtm.on(RTM_EVENTS, rtms[0].listeners(RTM_EVENTS.MESSAGE)[0]);
+	    })
+	})
     })
 
     it('Send a message', function () {
 	this.app.client.execute(function (){
-	    // create a dummy client
-	    _rtm = new DummyRtmClient("", {});
-	    
-	    // copy the event listener for RTM_EVENTS.MESSAGE
-	    // Note: we assume rtms[0] is connected to the kongaribug channel
-	    _rtm.on(RTM_EVENTS, rtms[0].listeners(RTM_EVENTS.MESSAGE)[0]);
-
 	    // send a sample message
 	    _rtm.send_message({
 		type: 'message',
